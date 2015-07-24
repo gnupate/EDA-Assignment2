@@ -8,19 +8,20 @@ if(is.element("summarySCC_PM25.rds",files)) { #the data exists, go ahead and wor
     sourceData <- readRDS("summarySCC_PM25.rds")
     
     ## build a dataframe to hold data and plot from
-    year = c(1999,2002,2005,2008)
-    emissions = c(0,0,0,0)
+    year = 1999:2008
+    emissions = 1999:2008
     df = data.frame(year , emissions)
     
     ## fill in the dataframe for each year
     counter = 1
     for(i in year) {
-        df$emissions[counter] <- colSums(select(filter(sourceData, year == i),Emissions))
+        df$emissions[counter] <- colSums(select(filter(sourceData, year == i, fips == 24510),Emissions))
         counter <- counter + 1
     }
+    df <- filter(df,emissions > 0)
     ## use the png filter to write to a graphics file device
-    png(file="plot1.png")
-    plot(df, main="Annual PM25 Emmissions across US")
+    png(file="Plot2.png")
+    plot(df, type = "l", main="Annual Emissions in Baltimore")
     
     dev.off()
     
